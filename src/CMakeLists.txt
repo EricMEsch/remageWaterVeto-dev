@@ -4,6 +4,8 @@
 set(_root ${PROJECT_SOURCE_DIR})
 
 set(PROJECT_PUBLIC_HEADERS
+    ${_root}/include/CustomMUSUNGenerator.hh
+    ${_root}/include/RMGCerenkov.hh
     ${_root}/include/RMGExceptionHandler.hh
     ${_root}/include/RMGEventAction.hh
     ${_root}/include/RMGGeneratorCosmicMuons.hh
@@ -25,6 +27,7 @@ set(PROJECT_PUBLIC_HEADERS
     ${_root}/include/RMGPhysics.hh
     ${_root}/include/RMGRunAction.hh
     ${_root}/include/RMGRun.hh
+    ${_root}/include/RMGScintillation.hh
     ${_root}/include/RMGScintillatorDetector.hh
     ${_root}/include/RMGScintillatorOutputScheme.hh
     ${_root}/include/RMGStackingAction.hh
@@ -42,6 +45,7 @@ set(PROJECT_PUBLIC_HEADERS
     ${_root}/include/RMGWorkerInitialization.hh)
 
 set(PROJECT_SOURCES
+    ${_root}/src/CustomMUSUNGenerator.cc
     ${_root}/src/RMGExceptionHandler.cc
     ${_root}/src/RMGHardware.cc
     ${_root}/src/RMGHardwareMessenger.cc

@@ -65,8 +65,10 @@
 #include "G4StoppingPhysics.hh"
 #include "G4ThermalNeutrons.hh"
 
+#include "RMGCerenkov.hh"
 #include "RMGLog.hh"
 #include "RMGNeutronCaptureProcess.hh"
+#include "RMGScintillation.hh"
 #include "RMGTools.hh"
 
 namespace u = CLHEP;
@@ -280,6 +282,9 @@ void RMGPhysics::ConstructOptical() {
 
   G4OpticalParameters* op_par = G4OpticalParameters::Instance();
   op_par->SetScintTrackSecondariesFirst(true);
+  op_par->SetCerenkovTrackSecondariesFirst(false);
+  op_par->SetCerenkovMaxBetaChange(-1.);
+  op_par->SetCerenkovMaxPhotonsPerStep(-1);
   op_par->SetScintByParticleType(true);
   op_par->SetBoundaryInvokeSD(true);
 
@@ -293,7 +298,13 @@ void RMGPhysics::ConstructOptical() {
   auto boundary_proc = new G4OpBoundaryProcess();
   auto rayleigh_scatt_proc = new G4OpRayleigh();
   auto wls_proc = new G4OpWLS();
-  auto cerenkov_proc = new G4Cerenkov();
+  auto cerenkov_proc = new RMGCerenkov();
+
+  G4cout << "Maximum beta change per step: " << op_par->GetCerenkovMaxBetaChange() << G4endl;
+  G4cout << "Maximum photons per step: " << op_par->GetCerenkovMaxPhotonsPerStep() << G4endl;
+  G4cout << "Track secondaries first: " << op_par->GetCerenkovTrackSecondariesFirst() << G4endl;
+  G4cout << "Stack photons: " << op_par->GetCerenkovStackPhotons() << G4endl;
+  G4cout << "Verbose level: " << op_par->GetCerenkovVerboseLevel() << G4endl;
 
   absorption_proc->SetVerboseLevel(G4VModularPhysicsList::verboseLevel);
   boundary_proc->SetVerboseLevel(G4VModularPhysicsList::verboseLevel);
@@ -307,8 +318,9 @@ void RMGPhysics::ConstructOptical() {
 
     if (scint_proc->IsApplicable(*particle)) {
       proc_manager->AddProcess(scint_proc);
-      proc_manager->SetProcessOrderingToLast(scint_proc, G4ProcessVectorDoItIndex::idxAtRest);
-      proc_manager->SetProcessOrderingToLast(scint_proc, G4ProcessVectorDoItIndex::idxPostStep);
+      //  This messes with the random engine (probably changes the order)
+      //  proc_manager->SetProcessOrderingToLast(scint_proc, G4ProcessVectorDoItIndex::idxAtRest);
+      //  proc_manager->SetProcessOrderingToLast(scint_proc, G4ProcessVectorDoItIndex::idxPostStep);
     }
 
     if (cerenkov_proc->IsApplicable(*particle)) {

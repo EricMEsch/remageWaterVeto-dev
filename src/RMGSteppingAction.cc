@@ -18,6 +18,7 @@
 #include "G4GenericMessenger.hh"
 #include "G4Ions.hh"
 #include "G4Step.hh"
+#include "Randomize.hh"
 
 #include "RMGEventAction.hh"
 #include "RMGLog.hh"
@@ -54,6 +55,14 @@ void RMGSteppingAction::UserSteppingAction(const G4Step* step) {
       }
     }
   }
+  auto track = step->GetTrack();
+  auto particle_type = track->GetDefinition()->GetParticleType();
+  CLHEP::HepRandomEngine* theEngine = G4Random::getTheEngine();
+  double rnd1 = G4UniformRand();
+  std::string engineName = typeid(*theEngine).name();
+  if (engineName.find("RanecuEngine") != std::string::npos) return;
+  std::cout << "Random Engine Name: " << engineName << " Particle: " << particle_type
+            << " Random Number: " << rnd1 << std::endl;
 }
 
 void RMGSteppingAction::SetDaughterKillLifetime(double max_lifetime) {

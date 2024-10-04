@@ -15,7 +15,9 @@
 
 #include "RMGTrackingAction.hh"
 
+#include "G4OpticalPhoton.hh"
 #include "G4Track.hh"
+#include "Randomize.hh"
 
 #include "RMGRunAction.hh"
 
@@ -23,9 +25,23 @@ RMGTrackingAction::RMGTrackingAction(RMGRunAction* run_action) : fRunAction(run_
 
 void RMGTrackingAction::PreUserTrackingAction(const G4Track* aTrack) {
 
+  auto particle = aTrack->GetDefinition();
+  if (particle == G4OpticalPhoton::OpticalPhotonDefinition()) {
+    defaultEngine = G4Random::getTheEngine();
+
+    CLHEP::HepRandomEngine* secondEngine = new CLHEP::RanecuEngine;
+
+    G4Random::setTheEngine(secondEngine);
+    ResetRNG = true;
+  }
   for (auto& el : fRunAction->GetAllOutputDataFields()) { el->TrackingActionPre(aTrack); }
 }
 
-void RMGTrackingAction::PostUserTrackingAction(const G4Track* /*aTrack*/) {}
+void RMGTrackingAction::PostUserTrackingAction(const G4Track* /*aTrack*/) {
+  if (ResetRNG) {
+    G4Random::setTheEngine(defaultEngine);
+    ResetRNG = false;
+  }
+}
 
 // vim: tabstop=2 shiftwidth=2 expandtab

@@ -27,19 +27,19 @@
 RMGStackingAction::RMGStackingAction(RMGRunAction* runaction) : fRunAction(runaction) {}
 
 G4ClassificationOfNewTrack RMGStackingAction::ClassifyNewTrack(const G4Track* aTrack) {
-  std::optional<G4ClassificationOfNewTrack> new_status = std::nullopt;
-  for (auto& el : fRunAction->GetAllOutputDataFields()) {
-    auto request_status = el->StackingActionClassify(aTrack, fStage);
-    if (!request_status.has_value()) continue; // this output scheme does not care.
-
-    if (!new_status.has_value() || new_status.value() == request_status.value()) {
-      new_status = request_status;
-    } else {
-      RMGLog::OutDev(RMGLog::error, "Conflicting requests for new track classification.");
-    }
-  }
-
-  if (new_status.has_value()) return new_status.value();
+  // std::optional<G4ClassificationOfNewTrack> new_status = std::nullopt;
+  // for (auto& el : fRunAction->GetAllOutputDataFields()) {
+  //   auto request_status = el->StackingActionClassify(aTrack, fStage);
+  //   if (!request_status.has_value()) continue; // this output scheme does not care.
+  //
+  //  if (!new_status.has_value() || new_status.value() == request_status.value()) {
+  //    new_status = request_status;
+  //  } else {
+  //    RMGLog::OutDev(RMGLog::error, "Conflicting requests for new track classification.");
+  //  }
+  //}
+  //
+  // if (new_status.has_value()) return new_status.value();
   return fUrgent;
 }
 

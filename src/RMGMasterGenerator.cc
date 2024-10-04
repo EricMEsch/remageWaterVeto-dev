@@ -34,6 +34,8 @@
 #include "RMGVertexConfinement.hh"
 #include "RMGVertexFromFile.hh"
 
+#include "CustomMUSUNGenerator.hh"
+
 RMGMasterGenerator::RMGMasterGenerator() : fVertexGeneratorObj(nullptr), fGeneratorObj(nullptr) {
 
   this->DefineCommands();
@@ -115,6 +117,7 @@ void RMGMasterGenerator::SetGenerator(RMGMasterGenerator::Generator gen) {
       break;
     case Generator::kUndefined:
     case Generator::kUserDefined: break;
+    case Generator::kCustomMUSUN: fGeneratorObj = std::make_unique<CustomMUSUNGenerator>(); break;
     default:
       RMGLog::Out(RMGLog::fatal, "No known implementation for generator '",
           static_cast<int>(fGenerator), "' (implement me)");
