@@ -24,29 +24,14 @@
 class RMGCerenkov : public G4Cerenkov {
   public:
 
-    RMGCerenkov(const G4String& name = "RMGCerenkov") : G4Cerenkov(name) {}
+    static G4ThreadLocal CLHEP::HepRandomEngine* fAlternativeEngine;
 
-    virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step) override {
-      CLHEP::HepRandomEngine* defaultEngine = G4Random::getTheEngine();
+    RMGCerenkov(const G4String& name = "RMGCerenkov");
 
-      CLHEP::HepRandomEngine* secondEngine = new CLHEP::RanecuEngine;
-
-      G4Random::setTheEngine(secondEngine);
-
-      // Call the original Cerenkov PostStepDoIt
-      G4VParticleChange* particleChange = G4Cerenkov::PostStepDoIt(track, step);
-
-      G4Random::setTheEngine(defaultEngine);
-
-      return particleChange;
-    }
+    virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step) override;
 
     G4double PostStepGetPhysicalInteractionLength(const G4Track& aTrack, G4double,
-        G4ForceCondition* condition) override {
-      G4double StepLimit = DBL_MAX;
-      *condition = StronglyForced;
-      return StepLimit;
-    };
+        G4ForceCondition* condition) override;
 };
 
 #endif

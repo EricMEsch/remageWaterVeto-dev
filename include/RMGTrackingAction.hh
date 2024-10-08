@@ -18,6 +18,7 @@
 
 #include "G4UserTrackingAction.hh"
 #include "Randomize.hh"
+#include "globals.hh"
 
 class RMGRunAction;
 class RMGTrackingAction : public G4UserTrackingAction {
@@ -43,6 +44,7 @@ class RMGTrackingAction : public G4UserTrackingAction {
     RMGRunAction* fRunAction = nullptr;
     bool ResetRNG = false;
     CLHEP::HepRandomEngine* defaultEngine;
+    static G4ThreadLocal CLHEP::HepRandomEngine* fAlternativeEngine;
 };
 
 #endif

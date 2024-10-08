@@ -46,6 +46,7 @@ set(PROJECT_PUBLIC_HEADERS
 
 set(PROJECT_SOURCES
     ${_root}/src/CustomMUSUNGenerator.cc
+    ${_root}/src/RMGCerenkov.cc
     ${_root}/src/RMGExceptionHandler.cc
     ${_root}/src/RMGHardware.cc
     ${_root}/src/RMGHardwareMessenger.cc

@@ -21,7 +21,12 @@
 
 #include "RMGRunAction.hh"
 
-RMGTrackingAction::RMGTrackingAction(RMGRunAction* run_action) : fRunAction(run_action) {}
+G4ThreadLocal CLHEP::HepRandomEngine* RMGTrackingAction::fAlternativeEngine = nullptr;
+
+RMGTrackingAction::RMGTrackingAction(RMGRunAction* run_action) : fRunAction(run_action) {
+  // Initialize alternative RNG engine per thread
+  if (!fAlternativeEngine) { fAlternativeEngine = new CLHEP::RanecuEngine; }
+}
 
 void RMGTrackingAction::PreUserTrackingAction(const G4Track* aTrack) {
 
@@ -29,9 +34,7 @@ void RMGTrackingAction::PreUserTrackingAction(const G4Track* aTrack) {
   if (particle == G4OpticalPhoton::OpticalPhotonDefinition()) {
     defaultEngine = G4Random::getTheEngine();
 
-    CLHEP::HepRandomEngine* secondEngine = new CLHEP::RanecuEngine;
-
-    G4Random::setTheEngine(secondEngine);
+    G4Random::setTheEngine(fAlternativeEngine);
     ResetRNG = true;
   }
   for (auto& el : fRunAction->GetAllOutputDataFields()) { el->TrackingActionPre(aTrack); }
