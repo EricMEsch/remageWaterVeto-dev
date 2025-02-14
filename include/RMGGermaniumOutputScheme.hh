@@ -106,6 +106,7 @@ class RMGGermaniumOutputScheme : public RMGVOutputScheme {
     bool fStoreSinglePrecisionPosition = false;
 
     bool fStoreTrackID = false;
+    std::map<std::string, int> fProcessMap;
 };
 
 #endif

@@ -91,6 +91,10 @@ bool RMGGermaniumDetector::ProcessHits(G4Step* step, G4TouchableHistory* /*histo
   const auto prestep = step->GetPreStepPoint();
   const auto position = prestep->GetPosition();
 
+  const auto process = step->GetPostStepPoint()->GetProcessDefinedStep();
+  std::string process_name = "null";
+  if (process) { process_name = process->GetProcessName(); }
+
   // locate us
   const auto pv = prestep->GetTouchableHandle()->GetVolume();
   const auto pv_name = pv->GetName();
@@ -127,6 +131,8 @@ bool RMGGermaniumDetector::ProcessHits(G4Step* step, G4TouchableHistory* /*histo
   hit->global_time = prestep->GetGlobalTime();
   hit->track_id = step->GetTrack()->GetTrackID();
   hit->parent_track_id = step->GetTrack()->GetParentID();
+  hit->process_name = process_name;
+  hit->step_length = step->GetStepLength();
 
   // Get distance to surface.
   // Check distance to surfaces of Mother volume
