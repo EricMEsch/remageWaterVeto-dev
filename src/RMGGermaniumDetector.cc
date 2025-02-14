@@ -133,6 +133,7 @@ bool RMGGermaniumDetector::ProcessHits(G4Step* step, G4TouchableHistory* /*histo
   hit->parent_track_id = step->GetTrack()->GetParentID();
   hit->process_name = process_name;
   hit->step_length = step->GetStepLength();
+  hit->kinetic_energy = prestep->GetKineticEnergy();
 
   // Get distance to surface.
   // Check distance to surfaces of Mother volume

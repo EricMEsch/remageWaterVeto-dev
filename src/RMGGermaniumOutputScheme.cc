@@ -80,6 +80,7 @@ void RMGGermaniumOutputScheme::AssignOutputNames(G4AnalysisManager* ana_man) {
     CreateNtupleFOrDColumn(ana_man, id, "dist_to_surf_in_m", fStoreSinglePrecisionPosition);
     ana_man->CreateNtupleSColumn(id, "process_poststep");
     CreateNtupleFOrDColumn(ana_man, id, "steplength_in_mm", fStoreSinglePrecisionPosition);
+    CreateNtupleFOrDColumn(ana_man, id, "kineticEnergy_in_keV", fStoreSinglePrecisionPosition);
     ana_man->FinishNtuple(id);
   }
 }
@@ -181,6 +182,8 @@ void RMGGermaniumOutputScheme::StoreEvent(const G4Event* event) {
           fStoreSinglePrecisionPosition);
       ana_man->FillNtupleSColumn(ntupleid, col_id++, hit->process_name);
       FillNtupleFOrDColumn(ana_man, ntupleid, col_id++, hit->step_length / u::mm,
+          fStoreSinglePrecisionPosition);
+      FillNtupleFOrDColumn(ana_man, ntupleid, col_id++, hit->kinetic_energy / u::keV,
           fStoreSinglePrecisionPosition);
       // NOTE: must be called here for hit-oriented output
       ana_man->AddNtupleRow(ntupleid);

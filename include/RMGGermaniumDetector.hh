@@ -57,6 +57,7 @@ class RMGGermaniumDetectorHit : public G4VHit {
     int parent_track_id = -1;
     std::string process_name;
     double step_length = -1;
+    double kinetic_energy = -1;
 };
 
 using RMGGermaniumDetectorHitsCollection = G4THitsCollection<RMGGermaniumDetectorHit>;
